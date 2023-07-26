@@ -1,0 +1,48 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  font-size: 62.5%;
+}
+
+body {
+  padding-top: 8rem;
+  font-size: 1.6rem;
+  color: #333333;
+  --type-first: Helvetica, Arial, sans-serif;
+  --type-second: "Spectral", Georgia;
+  font-family: var(--type-first);
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input {
+  display: block;
+  font-size: 1rem;
+  font-family: var(--type-first);
+  color: #333333;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  max-width: 80rem;
+  padding: 0 1.6rem;
+  margin: 0 auto;
+}
