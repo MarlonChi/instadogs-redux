@@ -19,8 +19,6 @@ const FeedPhotos = ({ setModalPhoto }) => {
     fetchPhotos();
   }, [request]);
 
-  console.log(data);
-
   if (error) return <Error error={error} />;
   if (loading) return <Loading />;
   if (data)
