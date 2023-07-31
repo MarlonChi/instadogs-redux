@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useFetch from "../../hooks/useFetch";
-import { PHOTO_GET } from "../../api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPhoto } from "../../store/photo";
 
 import Error from "../Helper/Error";
 import Loading from "../Helper/Loading";
@@ -10,12 +10,13 @@ import Head from "../Helper/Head";
 
 const Photo = () => {
   const { id } = useParams();
-  const { data, loading, error, request } = useFetch();
+
+  const { data, loading, error } = useSelector((state) => state.photo);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const { url, options } = PHOTO_GET(id);
-    request(url, options);
-  }, [id, request]);
+    dispatch(fetchPhoto(id));
+  }, [id, dispatch]);
 
   if (error) return <Error error={error} />;
   if (loading) return <Loading />;
@@ -23,7 +24,7 @@ const Photo = () => {
     return (
       <section className="container mainContainer">
         <Head title={data.photo.title} />
-        <PhotoContent data={data} single={true} />
+        <PhotoContent single={true} />
       </section>
     );
   else return null;
