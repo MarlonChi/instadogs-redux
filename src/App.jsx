@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Login from "./components/Login/Login";
 import User from "./components/User/User";
+import Photo from "./components/Photo/Photo";
 import ProtectedRoute from "./components/Helper/ProtectedRoute";
 
 import "./App.css";
@@ -27,6 +28,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/foto/:id" element={<Photo />} />
           </Routes>
           <Footer />
         </UserStorage>
