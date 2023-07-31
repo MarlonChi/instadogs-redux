@@ -10,6 +10,7 @@ import Photo from "./components/Photo/Photo";
 import ProtectedRoute from "./components/Helper/ProtectedRoute";
 
 import "./App.css";
+import UserProfile from "./components/User/UserProfile";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               }
             />
             <Route path="/foto/:id" element={<Photo />} />
+            <Route path="/perfil/:user" element={<UserProfile />} />
           </Routes>
           <Footer />
         </UserStorage>
