@@ -1,7 +1,7 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { UserContext } from "../../UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin } from "../../store/user";
 
 import Input from "../Forms/Input";
 import Button from "../Forms/Button";
@@ -15,13 +15,18 @@ const LoginForm = () => {
   const username = useForm();
   const password = useForm();
 
-  const { userLogin, error, loading } = useContext(UserContext);
+  const dispatch = useDispatch();
+  const { token, user } = useSelector((state) => state);
+  const loading = token.loading || user.loading;
+  const error = token.error || user.error;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (username.validate() && password.validate()) {
-      userLogin(username.value, password.value);
+      dispatch(
+        userLogin({ username: username.value, password: password.value })
+      );
     }
   };
 
