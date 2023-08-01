@@ -1,29 +1,38 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadNewPhotos, resetFeedState } from "../../store/feed";
 import PropTypes from "prop-types";
 
 import FeedModal from "./FeedModal";
 import FeedPhotos from "./FeedPhotos";
+import Loading from "../Helper/Loading";
+import Error from "../Helper/Error";
 
 const Feed = ({ user }) => {
   const [modalPhoto, setModalPhoto] = useState(null);
-  const [pages, setPages] = useState([1]);
-  const [infinite, setInfinite] = useState(true);
+  const { infinite, loading, list, error } = useSelector((state) => state.feed);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const infiniteScroll = () => {
+    dispatch(resetFeedState());
+    dispatch(loadNewPhotos({ user, total: 6 }));
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    let wait = false;
+    function infiniteScroll() {
       if (infinite) {
-        let wait = false;
         const scroll = window.scrollY;
         const height = document.body.offsetHeight - window.innerHeight;
         if (scroll > height * 0.75 && !wait) {
-          setPages((pages) => [...pages, pages.length + 1]);
+          dispatch(loadNewPhotos({ user, total: 6 }));
           wait = true;
           setTimeout(() => {
             wait = false;
           }, 500);
         }
       }
-    };
+    }
 
     window.addEventListener("wheel", infiniteScroll);
     window.addEventListener("scroll", infiniteScroll);
@@ -31,22 +40,28 @@ const Feed = ({ user }) => {
       window.removeEventListener("wheel", infiniteScroll);
       window.removeEventListener("scroll", infiniteScroll);
     };
-  }, [infinite]);
+  }, [infinite, dispatch, user]);
 
   return (
     <div>
       {modalPhoto && (
         <FeedModal photo={modalPhoto} setModalPhoto={setModalPhoto} />
       )}
-      {pages.map((page) => (
-        <FeedPhotos
-          key={page}
-          user={user}
-          page={page}
-          setModalPhoto={setModalPhoto}
-          setInfinite={setInfinite}
-        />
-      ))}
+      {list.length > 0 && <FeedPhotos setModalPhoto={setModalPhoto} />}
+      {loading && <Loading />}
+      {error && <Error error={error} />}
+
+      {!infinite && !user && (
+        <p
+          style={{
+            textAlign: "center",
+            padding: "2rem 0 4rem 0",
+            color: "#888",
+          }}
+        >
+          Não existem mais postagens.
+        </p>
+      )}
     </div>
   );
 };
@@ -55,7 +70,7 @@ Feed.defaultProps = {
   user: 0,
 };
 
-Feed.propType = {
+Feed.propTypes = {
   user: PropTypes.oneOfType([
     PropTypes.string.isRequired,
     PropTypes.number.isRequired,
